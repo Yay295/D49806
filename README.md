@@ -1,1 +1,2 @@
-# Fall 2016 CSC 461 Program 1
+#CSC 461 Program 1
+Fall 2016
