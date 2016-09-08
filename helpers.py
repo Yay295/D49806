@@ -34,11 +34,11 @@ def parseDate(string):
 	try:
 		return time.strptime(string, '%d%m%Y')
 	except ValueError as e:
-		print e
+		print(e)
 
 def parseTime(string):
 	''' Converts a string in the format HHMMSS to a format used by the `time` library. '''
 	try:
 		return time.strptime(string, '%H%M%S')
 	except ValueError as e:
-		print e
+		print(e)
