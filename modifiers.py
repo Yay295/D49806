@@ -28,10 +28,21 @@ def deleteFiles(files):
 
 
 modify = {
+	''' Converts a list of strings to uppercase. '''
 	'upper': lambda files: list(map(lambda filename: filename.upper(), files)),
+
+	''' Converts a list of strings to lowercase. '''
 	'lower': lambda files: list(map(lambda filename: filename.lower(), files)),
+
+	''' Trims `amount` number of characters from each string in `files`.
+	If `amount` is positive it trims from the start, otherwise it trims from the end. '''
 	'trim': lambda files, amount: list(map(lambda filename: filename[amount if amount >= 0 else 0 : len(filename) if amount >= 0 else len(filename) + amount], files)),
+
+	''' Does a RegEx replace on each string in `files`.
+	`before` is the RegEx replacement string, and `after` is the other RegEx string. 
+	That doesn't make much sense actually... '''
 	'replace': lambda files, before, after: list(map(lambda filename: re.sub(before, after, filename), files)),
+
 	'date': changeDate,
 	'time': changeTime,
 	'touch': touchFiles,
