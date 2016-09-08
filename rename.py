@@ -17,8 +17,8 @@
 """
 import sys, glob, platform, argparse, getopt
 
-#Global variables
-platform
+#Global variables - try not to use these
+
 
 # here is the "main" function, must define it before using it
 def main( argv ):
@@ -51,49 +51,27 @@ def main( argv ):
     
     # parse command arguments
     args = parser.parse_args()
-
-   # #   # print results of parsing
-   #  print( 'command line args:', sys.argv )
-   #  print( 'argparse:', args )
-   #  print( 'args.verbose =', args.verbose )
-   #  print( 'args.print =', args.print )
-   #  print( 'args.interactive =', args.interactive )
-   #  print( 'args.trim =', args.trim)
-   #  print( 'args.replace =', args.replace)
-   #  print( 'args.number =', args.number)
     
-    # Check platform, if not Linux or Windows return.
-    if setPlatform(platform.system()) != 0:
+    # Check platform, if not Linux or Windows return 1 from program.
+    systemPlatform = setPlatform(platform.system())
+    if systemPlatform == 'E':
+        print('Platform not recognized by file rename tool. Exiting...')
         return 1
+        
+    # Parse command line arguments
+    
+        
         
     
 def setPlatform(val):
     '''Checks whether the machine is running Linux or Windows. If it's not running
     Linux or Windows, it throws an error and returns 1'''
     if val == 'Linux':
-            global platform
-            platform = 'L'
-            return 0
+            return 'L'
     elif val == 'Windows':
-            global platform
-            platform = 'W'
-            return 0
+            return 'W'
     else:
-            print('Platform not recognized for tool. Exiting...')
-            return 1 #for error
-
-
-def usage():
-    '''This prints correct usage for the program and possible options, along with their definitions.'''
-    print ('This is a file rename utility. Acceptable usage:\n\trename.py options file1 file2... \n\tAvailable Options include:')
-    print('\t-l,   --lower    Convert filenames to lowercase')
-    print('\t-u,   --upper    Convert filenames to uppercase')
-    print('\t-t n, -- trim n  Positive n: trim n characters from the start of each filename')
-    print('\t\t\t\t\t   Negative n: trim n characters from the end of each filename')
-    print('\t-r "oldstring" "newstring", --replace "oldstring" "newstring"\n\t\t\t\t\t\tReplace oldstring with newstring in filenames')
-    print('\t-n countstring, --number countstring\n\t\t\t\t\t\tRename files in sequence using countstring')
-    print('\t-D DDMMYYYY, --date DDMMYYYY\tchange file datestamps')
-    print('\t-T HHMMSS, --time HHMMSS\t change file timestamps')
+            return 'E'  # for error
 
 
 # this pattern must occur after the function definitions (typically at the end of the file)
