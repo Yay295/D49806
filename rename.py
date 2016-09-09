@@ -24,22 +24,7 @@ import sys, glob, platform, argparse, getopt
 def main( argv ):
     ''' Starts program, checks for correct usage, checks platform, sets global variables
     and begins analysis of files in directory.'''
-    
-    '''NOTES:
-    We can add an action='append' to the attributes of the parser.add_argument to make repeat 
-    instances of arguments save to lists of lists.
-    
-    For example:
-    -r a b -r c d
-    would be saved
-    args.replace = [[a, b], [c, d]]
-    
-    if we think we want that?
-    '''
-    
-    
-    ''' To do: Figure out how to call functions from other modules'''
-    
+
     parser = argparse.ArgumentParser( usage = "-h or --help for full help and usage menu" )
     
     # optional arguments 
@@ -65,86 +50,22 @@ def main( argv ):
     args = parser.parse_args()
             
     # Check platform, if not Linux or Windows return 1 from program.
-    # pass systemPlatform into funcs that need to differentiate if necessary?
+    
+    from helpers import setPlatform, makeList
     systemPlatform = setPlatform(platform.system())
     if systemPlatform == 'E':
         print('Platform not recognized by file rename tool. Exiting...')
         return 1
-        
-    # Parse command line arguments
-    '''
-     The idea here is to chop up the command line arguments after it encounters a -r, -t, or -n?
-    because that would end a sequence of changes - since we're executing consecutive arguments.
-
-    Some special cases...
-    In the case of encountering a Delete in a sequence of actions, stop execution there and delete the files listed after the delete
-    In the case of encountering a Print in a sequence of actions, stop execution there and just print the file names listed after the print
-    '''
-
-    # set some important variables...
-    replaceCount = 0
-    numberCount = 0
-    trimCount = 0
-    dateCount = 0
-    timeCount = 0
     
     #get a list going for commands and their parameters
     masterExecutionList = []
-
-    # loop through sys.argv, building a list of execution commands, tupled with their parameters
-    for cmd in sys.argv:
-        if cmd in ('-l', '--lower'):
-            masterExecutionList.append(('lower', None))      
-            
-        elif cmd in ('-u', '--upper'):
-            masterExecutionList.append(('upper', None))
-            
-        elif cmd in ('-p', '--print'):
-            masterExecutionList.append(('print', None))
-            
-        elif cmd in ('-d', '--delete'):
-            masterExecutionList.append(('delete', None))
-        
-        elif cmd in ('-dt', '--touch'):
-            masterExecutionList.append(('touch', None))
-            
-        elif cmd in ('-t', '--trim'):
-            masterExecutionList.append(('trim', args.trim[trimCount]))
-            trimCount += 1
-            
-        elif cmd in ('-r', '--replace'):
-            masterExecutionList.append(('replace', args.replace[replaceCount])) # append execution list with tuple
-            replaceCount += 1    # keep track of what repeat we've found to do lookup
-
-        elif cmd in ('-n', '--number'):
-            masterExecutionList.append(('number', args.number[numberCount]))
-            numberCount += 1
-            
-        elif cmd in ('-D', '--date'):
-            masterExecutionList.append(('date', args.date[dateCount]))
-            dateCount += 1
-        
-        elif cmd in ('-T', '--time'):
-            masterExecutionList.append(('time', args.time[timeCount]))
-            timeCount += 1
-            
+    masterExecutionList = makeList(sys.argv, args)              
     
     # Use something like this to loop through the execution list and send the tuple to another function
     count = 0
     for element in masterExecutionList:
         print(masterExecutionList[count])
         count += 1
-
-    
-def setPlatform(val):
-    '''Checks whether the machine is running Linux or Windows. If it's not running
-    Linux or Windows, it throws an error and returns 1'''
-    if val == 'Linux':
-            return 'L'
-    elif val == 'Windows':
-            return 'W'
-    else:
-            return 'E'  # for error
 
 
 # this pattern must occur after the function definitions (typically at the end of the file)

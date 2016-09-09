@@ -24,3 +24,63 @@ def parseTime(string):
 		return time.strptime(string, '%H%M%S')
 	except ValueError as e:
 		print(e)
+
+
+def setPlatform(val):
+	'''Checks whether the machine is running Linux or Windows. If it's not running
+	Linux or Windows, it throws an error and returns 1'''
+	if val == 'Linux':
+		return 'L'
+	elif val == 'Windows':
+		return 'W'
+	else:
+		return 'E'  # for error
+		
+		
+def makeList(argv, args):		
+	masterExecutionList = []
+	# set some important variables...
+	replaceCount = 0
+	numberCount = 0
+	trimCount = 0
+	dateCount = 0
+	timeCount = 0
+	
+	# loop through sys.argv, building a list of execution commands, tupled with their parameters
+	for cmd in argv:
+		if cmd in ('-l', '--lower'):
+			masterExecutionList.append(('lower', None))      
+			
+		elif cmd in ('-u', '--upper'):
+			masterExecutionList.append(('upper', None))
+			
+		elif cmd in ('-p', '--print'):
+			masterExecutionList.append(('print', None))
+			
+		elif cmd in ('-d', '--delete'):
+			masterExecutionList.append(('delete', None))
+		
+		elif cmd in ('-dt', '--touch'):
+			masterExecutionList.append(('touch', None))
+			
+		elif cmd in ('-t', '--trim'):
+			masterExecutionList.append(('trim', args.trim[trimCount]))
+			trimCount += 1
+			
+		elif cmd in ('-r', '--replace'):
+			masterExecutionList.append(('replace', args.replace[replaceCount])) # append execution list with tuple
+			replaceCount += 1    # keep track of what repeat we've found to do lookup
+	
+		elif cmd in ('-n', '--number'):
+			masterExecutionList.append(('number', args.number[numberCount]))
+			numberCount += 1
+			
+		elif cmd in ('-D', '--date'):
+			masterExecutionList.append(('date', args.date[dateCount]))
+			dateCount += 1
+		
+		elif cmd in ('-T', '--time'):
+			masterExecutionList.append(('time', args.time[timeCount]))
+			timeCount += 1
+		
+	return masterExecutionList
