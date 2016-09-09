@@ -2,7 +2,7 @@ import os, re
 
 
 def countstring(files, string):
-	for i in range(0, len(files)):
+	for i, file in enumerate(files):
 		return
 
 
@@ -52,7 +52,7 @@ modify['trim'].__doc__ = ''' Trims `amount` number of characters from each strin
 If `amount` is positive it trims from the start, otherwise it trims from the end. '''
 modify['replace'].__doc__ = ''' Does a RegEx replace on each string in `files`.
 `before` is the RegEx replacement string, and `after` is the other RegEx string. 
-That doesn't make much sense actually... '''
+That's not a very good description actually... '''
 
 
 # Code for Testing
@@ -65,3 +65,4 @@ if __name__ == '__main__':
 	print('trim before:', modify['trim'](test, 5))
 	print('trim after:', modify['trim'](test, -3))
 	print('replace:', modify['replace'](test, '(.*)[Ss]', '\\1'))
+	print('countstring:', modify['countstring'](test, 'a##b#c###'))
