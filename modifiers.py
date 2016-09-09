@@ -1,6 +1,11 @@
 import os, re
 
 
+def countstring(files, string):
+	for i in range(0, len(files)):
+		return
+
+
 def changeDate(files, date):
 	for file in files:
 		continue
@@ -28,26 +33,27 @@ def deleteFiles(files):
 
 
 modify = {
-	''' Converts a list of strings to uppercase. '''
-	'upper': lambda files: list(map(lambda filename: filename.upper(), files)),
-
-	''' Converts a list of strings to lowercase. '''
-	'lower': lambda files: list(map(lambda filename: filename.lower(), files)),
-
-	''' Trims `amount` number of characters from each string in `files`.
-	If `amount` is positive it trims from the start, otherwise it trims from the end. '''
-	'trim': lambda files, amount: list(map(lambda filename: filename[amount if amount >= 0 else 0 : len(filename) if amount >= 0 else len(filename) + amount], files)),
-
-	''' Does a RegEx replace on each string in `files`.
-	`before` is the RegEx replacement string, and `after` is the other RegEx string. 
-	That doesn't make much sense actually... '''
-	'replace': lambda files, before, after: list(map(lambda filename: re.sub(before, after, filename), files)),
-
+	'upper': lambda files: [filename.upper() for filename in files],
+	'lower': lambda files: [filename.lower() for filename in files],
+	'trim': lambda files, amount: [(filename[amount if amount >= 0 else 0 : len(filename) if amount >= 0 else len(filename) + amount]) for filename in files],
+	'replace': lambda files, before, after: [re.sub(before, after, filename) for filename in files],
+	'countstring': countstring,
 	'date': changeDate,
 	'time': changeTime,
 	'touch': touchFiles,
 	'delete': deleteFiles
 }
+
+
+# Add docstrings to lambdas.
+modify['upper'].__doc__ = ''' Converts a list of strings to uppercase. '''
+modify['lower'].__doc__ = ''' Converts a list of strings to lowercase. '''
+modify['trim'].__doc__ = ''' Trims `amount` number of characters from each string in `files`.
+If `amount` is positive it trims from the start, otherwise it trims from the end. '''
+modify['replace'].__doc__ = ''' Does a RegEx replace on each string in `files`.
+`before` is the RegEx replacement string, and `after` is the other RegEx string. 
+That doesn't make much sense actually... '''
+
 
 # Code for Testing
 if __name__ == '__main__':
@@ -58,4 +64,4 @@ if __name__ == '__main__':
 	print('lowercase:', modify['lower'](test))
 	print('trim before:', modify['trim'](test, 5))
 	print('trim after:', modify['trim'](test, -3))
-	print('replace:', modify['replace'](test, '(.*)S', '\\1'))
+	print('replace:', modify['replace'](test, '(.*)[Ss]', '\\1'))
