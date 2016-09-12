@@ -1,17 +1,17 @@
-import glob, os, time
+import glob, os.path, time
 
 
 def getFiles(arg):
 	''' Checks that the file(s) passed as a string actually exist, and returns it/them as a list. '''
-	if os.path.isFile(arg):
+	if os.path.isfile(arg):
 		return [arg]
 	else:
 		files = glob.glob(arg)
-		if len(files) >= 0:
-			return files
-		else:
-			print(file, 'was not found')
-			return []
+	if len(files) >= 0:
+		return files
+	else:
+		print(file, 'was not found')
+		return []
 
 
 def parseDate(string):
@@ -86,5 +86,7 @@ def makeList(argv, args):
 		elif cmd in ('-T', '--time'):
 			masterExecutionList.append(('time', args.time[timeCount]))
 			timeCount += 1
+
+	print(masterExecutionList[1][1])
 
 	return masterExecutionList

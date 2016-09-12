@@ -44,14 +44,14 @@ def main( argv ):
     parser.add_argument('-T', '--time', action='append', nargs=1, metavar='HHMMSS', type=str, help='change file timestamps')
 
     # Required arguments - list of filenames
-    parser.add_argument("names", type=str, nargs='+', help="list of strings")
+    parser.add_argument("files", type=str, nargs='*', help="list of files to be modified")
     
     # parse command arguments
     args = parser.parse_args()
             
     # Check platform, if not Linux or Windows return 1 from program.
     
-    from helpers import setPlatform, makeList
+    from helpers import setPlatform, makeList, getFiles
     systemPlatform = setPlatform(platform.system())
     if systemPlatform == 'E':
         print('Platform not recognized by file rename tool. Exiting...')
@@ -61,11 +61,21 @@ def main( argv ):
     masterExecutionList = []
     masterExecutionList = makeList(sys.argv, args)              
     
+    print('files list: ', args.files)
+    
+    files = [] #what we append to, list of all files that will be modified (including *)
+    fileCount = 0   
+    for element in args.files:
+        files += getFiles(args.files[fileCount])
+        fileCount += 1
+    
+    
+    import modifiers
     # Use something like this to loop through the execution list and send the tuple to another function
     count = 0
-    for element in masterExecutionList:
-        print(masterExecutionList[count])
-        count += 1
+    # for element in masterExecutionList:
+    #     modify[masterExecutionList[count]]
+    #     count += 1
 
 
 # this pattern must occur after the function definitions (typically at the end of the file)
