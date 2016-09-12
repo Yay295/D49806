@@ -2,8 +2,16 @@ import os, pathlib, re
 
 
 def countstring(files, string):
-	for i, file in enumerate(files):
-		return
+	''' Replaces all filenames in "files" with the given string,
+	and then replaces all occurences of "#"s in the string with
+	a 0-padded number equal to the index of the filename in "files". '''
+	temp = []
+	matches = re.findall("#+", string)
+	for i in range(len(files)):
+		temp.append(string)
+		for match in matches:
+			temp[i] = temp[i].replace(match, str(i+1).zfill(len(match)), 1)
+	return temp
 
 
 def changeDate(files, date):
@@ -58,9 +66,9 @@ if __name__ == '__main__':
 	test = ['TeSt','ASFSD','thisislowercase']
 
 	print('Original:', test)
-	print('UPPERCASE:', modify['upper'](test))
-	print('lowercase:', modify['lower'](test))
+	print('UPPERCASE:', modify['upper'](test, None))
+	print('lowercase:', modify['lower'](test, None))
 	print('trim before:', modify['trim'](test, 5))
 	print('trim after:', modify['trim'](test, -3))
-	print('replace:', modify['replace'](test, '(.*)[Ss]', '\\1'))
-	print('countstring:', modify['countstring'](test, 'a##b#c###'))
+	print('replace:', modify['replace'](test, ['(.*)[Ss]', '\\1']))
+	print('countstring:', modify['countstring'](test, 'A##BB#CCC###'))
