@@ -31,7 +31,7 @@ def touchFiles(files, dummy):
 		except FileExistsError as e:
 			print(e)
 
-def deleteFiles(files):
+def deleteFiles(files, dummy):
 	''' Attempts to delete the files passed in as a list of filenames. '''
 	for file in files:
 		try:
