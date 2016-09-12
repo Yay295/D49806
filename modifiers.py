@@ -15,7 +15,7 @@ def changeTime(files, time):
 		continue
 
 
-def touchFiles(files):
+def touchFiles(files, dummy):
 	''' man touch '''
 	for file in files:
 		try:
@@ -33,10 +33,10 @@ def deleteFiles(files):
 
 
 modify = {
-	'upper': lambda files: [filename.upper() for filename in files],
-	'lower': lambda files: [filename.lower() for filename in files],
+	'upper': lambda files, dummy: [filename.upper() for filename in files],
+	'lower': lambda files, dummy: [filename.lower() for filename in files],
 	'trim': lambda files, amount: [(filename[amount if amount >= 0 else 0 : len(filename) if amount >= 0 else len(filename) + amount]) for filename in files],
-	'replace': lambda files, before, after: [re.sub(before, after, filename) for filename in files],
+	'replace': lambda files, args: [re.sub(args[0], args[1], filename) for filename in files],
 	'countstring': countstring,
 	'date': changeDate,
 	'time': changeTime,
@@ -50,9 +50,7 @@ modify['upper'].__doc__ = ''' Converts a list of strings to uppercase. '''
 modify['lower'].__doc__ = ''' Converts a list of strings to lowercase. '''
 modify['trim'].__doc__ = ''' Trims `amount` number of characters from each string in `files`.
 If `amount` is positive it trims from the start, otherwise it trims from the end. '''
-modify['replace'].__doc__ = ''' Does a RegEx replace on each string in `files`.
-`before` is the RegEx replacement string, and `after` is the other RegEx string. 
-That's not a very good description actually... '''
+modify['replace'].__doc__ = ''' Does a RegEx replace on each string in `files`. '''
 
 
 # Code for Testing
