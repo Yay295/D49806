@@ -4,11 +4,11 @@ import os, pathlib, re
 def countstring(files, string):
 	''' Replaces all filenames in "files" with the given string,
 	and then replaces all occurences of "#"s in the string with
-	a 0-padded number equal to the index of the filename in "files". '''
-	temp = []
+	a 0-padded number equal to the index of the filename in "files".
+	This returns a new list, it does not modify "files". '''
+	temp = [string] * len(files)
 	matches = re.findall("#+", string)
 	for i in range(len(files)):
-		temp.append(string)
 		for match in matches:
 			temp[i] = temp[i].replace(match, str(i+1).zfill(len(match)), 1)
 	return temp
