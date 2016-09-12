@@ -70,5 +70,5 @@ if __name__ == '__main__':
 	print('lowercase:', modify['lower'](test, None))
 	print('trim before:', modify['trim'](test, 5))
 	print('trim after:', modify['trim'](test, -3))
-	print('replace:', modify['replace'](test, ['(.*)[Ss]', '\\1']))
+	print('replace:', modify['replace'](test, ['(.*?)[Ss]', '\\1']))
 	print('countstring:', modify['countstring'](test, 'A##BB#CCC###'))
