@@ -1,4 +1,4 @@
-import os, re
+import os, pathlib, re
 
 
 def countstring(files, string):
