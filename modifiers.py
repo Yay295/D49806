@@ -1,4 +1,5 @@
 import os, pathlib, re
+from time import localtime, mktime
 
 
 def countstring(files, string):
@@ -15,12 +16,24 @@ def countstring(files, string):
 
 
 def changeDate(files, date):
+	''' Changes the day, month, and year of the modification time
+	of every file in `files`. '''
 	for file in files:
-		continue
+		mTime = time.localtime(os.path.getmtime(file))
+		mTime.tm_mday = date.tm_mday
+		mTime.tm_mon = date.tm_mon
+		mTime.tm_year = date.tm_year
+		os.utime(file, (os.path.getatime(file), time.mktime(mTime)))
 
 def changeTime(files, time):
+	''' Changes the hours, minutes, and seconds of the modification time
+	of every file in `files`. '''
 	for file in files:
-		continue
+		mTime = localtime(os.path.getmtime(file))
+		mTime.tm_hour = time.tm_hour
+		mTime.tm_min = time.tm_min
+		mTime.tm_sec = time.tm_sec
+		os.utime(file, (os.path.getatime(file), mktime(mTime)))
 
 
 def touchFiles(files, dummy):
