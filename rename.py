@@ -44,7 +44,7 @@ def main( argv ):
     parser.add_argument('-T', '--time', action='append', nargs=1, metavar='HHMMSS', type=str, help='change file timestamps')
 
     # Required arguments - list of filenames
-    parser.add_argument("files", type=str, nargs='*', help="list of files to be modified")
+    parser.add_argument("files", type=str, nargs='+', help="list of files to be modified")
     
     # parse command arguments
     args = parser.parse_args()
@@ -72,11 +72,11 @@ def main( argv ):
     
     import modifiers
     # Use something like this to loop through the execution list and send the tuple to another function
-    count = 0
-    # for element in masterExecutionList:
-    #     modify[masterExecutionList[count]]
-    #     count += 1
-
+    modified = []
+    for element in masterExecutionList:
+        modified = modifiers.modify[element[0]](files,element[1])
+    
+    print('files list: ', modified)
 
 # this pattern must occur after the function definitions (typically at the end of the file)
 if __name__ == '__main__':

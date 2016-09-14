@@ -87,6 +87,4 @@ def makeList(argv, args):
 			masterExecutionList.append(('time', args.time[timeCount]))
 			timeCount += 1
 
-	print(masterExecutionList[1][1])
-
 	return masterExecutionList
