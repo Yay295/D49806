@@ -15,7 +15,7 @@
  September 7         Set argparse, began to parse arguments into lists
  
 """
-import sys, glob, platform, argparse, getopt
+import sys, glob, platform, argparse, getopt, os
 
 #Global variables - try not to use these
 
@@ -39,7 +39,7 @@ def main( argv ):
     # arguments with required parameters and potential consecutive calls with their own data
     parser.add_argument('-t', '--trim', type=int, action='append', default=[], help='n > 0: trim n characters from start of each filename. n < 0: trim n characters from the end of each file name')    
     parser.add_argument('-r', '--replace', action='append', nargs=2)
-    parser.add_argument('-n', '--number', action='append', nargs=1, metavar=('countstring')) 
+    parser.add_argument('-n', '--number', action='append', nargs=1, metavar='countstring') 
     parser.add_argument('-D', '--date', action='append', nargs=1, metavar='DDMMYYYY', type=str, help='change file datestamps')
     parser.add_argument('-T', '--time', action='append', nargs=1, metavar='HHMMSS', type=str, help='change file timestamps')
 
@@ -69,14 +69,34 @@ def main( argv ):
         files += getFiles(args.files[fileCount])
         fileCount += 1
     
-    
     import modifiers
     # Use something like this to loop through the execution list and send the tuple to another function
     modified = []
     for element in masterExecutionList:
         modified = modifiers.modify[element[0]](files,element[1])
     
-    print('files list: ', modified)
+    # Loop through both lists and rename files, checking for verbose and interactive flags
+    for origFile, newFile in zip(files, modified):
+        print('original filename: ' , origFile, ' and new filename: ' , newFile)
+        if args.interactive:
+            response = intput('Do you want to rename ', origFile, ' to ', newFile, '? (y or n)')
+            if response.lower() == 'y':
+                os.rename(origFile, newFile)
+            elif reponse.lower() == 'yes':
+                os.rename(origFile,newFile)
+            elif response.lower() == 'n':
+                print ('Skipping ', origfile)
+            elif response.lower() == 'no':
+                print('Skipping ', origFile)
+            
+        elif args.verbose:
+            print('Renaming ' , origFile, ' to ', newFile)
+            os.rename(origFile, newFile)
+        
+        else:
+            os.rename(origFile, newFile)
+            
+    #print('files list: ', modified)
 
 # this pattern must occur after the function definitions (typically at the end of the file)
 if __name__ == '__main__':

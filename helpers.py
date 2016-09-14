@@ -76,8 +76,9 @@ def makeList(argv, args):
 			replaceCount += 1 # keep track of what repeat we've found to do lookup
 
 		elif cmd in ('-n', '--number'):
-			masterExecutionList.append(('number', args.number[numberCount]))
+			masterExecutionList.append(('countstring', args.number[numberCount][0]))
 			numberCount += 1
+			print('Added countstring: ', args.number[numberCount-1])
 
 		elif cmd in ('-D', '--date'):
 			masterExecutionList.append(('date', args.date[dateCount]))
