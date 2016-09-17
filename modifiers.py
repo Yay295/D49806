@@ -1,12 +1,14 @@
+#!python3
+
 import os, pathlib, re
 from time import localtime, mktime
 
 
 def countstring(files, string):
-	''' Replaces all filenames in "files" with the given string,
-	and then replaces all occurences of "#"s in the string with
-	a 0-padded number equal to the index of the filename in "files".
-	This returns a new list, it does not modify "files". '''
+	''' Replaces all filenames in `files` with the given string,
+	and then replaces all occurences of `#`s in the string with
+	a 0-padded number equal to the index of the filename in `files`.
+	This returns a new list; it does not modify `files`. '''
 	temp = [string] * len(files)
 	matches = re.findall("#+", string)
 	for i in range(len(files)):
@@ -37,7 +39,8 @@ def changeTime(files, time):
 
 
 def touchFiles(files, dummy):
-	''' man touch '''
+	''' Updates the modification time of every file in `files` with the current
+	time. Creates the file if it doesn't exist. '''
 	for file in files:
 		try:
 			pathlib.Path(file).touch()
