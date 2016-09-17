@@ -1,13 +1,14 @@
 #!python3
 
-import glob, os.path, time
+from os.path import isfile
+import glob, time
 
 def getFiles(arg):
     ''' Checks that the file(s) passed as a string actually exist, and returns it/them as a list. '''
-    if os.path.isfile(arg):
+    if isfile(arg):
         return [arg]
     else:
-        files = glob.glob(arg)
+        files = [file for file in glob.glob(arg) if isfile(file)]
     if len(files) >= 0:
         return files
     else:
