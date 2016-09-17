@@ -33,7 +33,8 @@
  September 16   Cleaned up code and updated main documentation.
  September 17   More formatting and cleaning. Added checks for input commands
                 and for files existing. Fixed `getFiles()` to not get
-                directories. Fixed filename modification loop.
+                directories. Fixed filename modification loop. Added output
+                for `print` and `verbose`. Added interactive mode.
 '''
 
 import sys, platform, argparse
@@ -85,13 +86,21 @@ def main(argv):
         print('None of the files you entered could be found.')
         return
 
-    import copy, modifiers
-    # Loop through the execution list and send the tuple to another function.
-    modified = copy.deepcopy(files)
-    for element in masterExecutionList:
-        modified = modifiers.modify[element[0]](modified,element[1])
+    if args.print or args.verbose:
+        print('Input Files:', files)
 
-    print('files list: ', modified)
+    import copy, modifiers
+    modified = copy.deepcopy(files)
+
+    if args.interactive:
+        modified = [input('What would you like to rename `' + file + '` to?\n') for file in modified]
+    else: # Loop through the execution list and send the tuple to another function.
+        for element in masterExecutionList:
+            if args.print and (element[0] in ['time', 'date', 'touch', 'delete']): continue
+            else: modified = modifiers.modify[element[0]](modified,element[1])
+
+    if args.print or args.verbose:
+        print('Output Files:', modified)
 
 # this pattern must occur after the function definitions (typically at the end of the file)
 if __name__ == '__main__':
