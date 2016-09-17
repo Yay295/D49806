@@ -31,7 +31,9 @@
  September 13   Bug fixes and file management added.
  September 14   `changeDate` and `changeTime` functions finished.
  September 16   Cleaned up code and updated main documentation.
- September 17   More formatting and cleaning.
+ September 17   More formatting and cleaning. Added checks for input commands
+                and for files existing. Fixed `getFiles()` to not get
+                directories. Fixed filename modification loop.
 '''
 
 import sys, platform, argparse
@@ -67,26 +69,27 @@ def main(argv):
     # Check platform, if not Linux or Windows return 1 from program.
     systemPlatform = setPlatform(platform.system())
     if systemPlatform == 'E':
-        print('Platform not recognized by file rename tool. Exiting...')
+        print('Platform not recognized by file rename tool.')
         return
 
     # Get a list going for commands and their parameters.
     masterExecutionList = makeList(sys.argv, args)
-    if not masterExecutionList:
+    if not masterExecutionList and not args.interactive:
         print('You must enter at least one command.')
         return
-
-    print('arguments: ', args)
-    print('files list: ', args.files)
 
     files = [] # What we append to. List of all files that will be modified (including *).
     for file in args.files:
         files += getFiles(file)
+    if not files:
+        print('None of the files you entered could be found.')
+        return
 
-    import modifiers
-    # Use something like this to loop through the execution list and send the tuple to another function
+    import copy, modifiers
+    # Loop through the execution list and send the tuple to another function.
+    modified = copy.deepcopy(files)
     for element in masterExecutionList:
-        modified = modifiers.modify[element[0]](files,element[1])
+        modified = modifiers.modify[element[0]](modified,element[1])
 
     print('files list: ', modified)
 
