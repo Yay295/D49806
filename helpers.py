@@ -1,5 +1,6 @@
-import glob, os.path, time
+#!python3
 
+import glob, os.path, time
 
 def getFiles(arg):
 	''' Checks that the file(s) passed as a string actually exist, and returns it/them as a list. '''
@@ -12,7 +13,6 @@ def getFiles(arg):
 	else:
 		print(file, 'was not found')
 		return []
-
 
 def parseDate(string):
 	''' Converts a string in the format DDMMYYYY to a format used by the `time` library. '''
@@ -28,17 +28,15 @@ def parseTime(string):
 	except ValueError as e:
 		print(e)
 
-
 def setPlatform(val):
-	''' Checks whether the machine is running Linux or Windows. If it's not running
-	Linux or Windows, it returns 'E' for "Error". '''
+	''' Checks whether the machine is running Linux or Windows. If it's not
+	running Linux or Windows, it returns 'E' for "Error". '''
 	if val == 'Linux':
 		return 'L'
 	elif val == 'Windows':
 		return 'W'
 	else:
 		return 'E'
-
 
 def makeList(argv, args):
 	''' Converts the arguments given to this program into a formatted list for easier execution. '''
