@@ -34,10 +34,12 @@
  September 17   More formatting and cleaning. Added checks for input commands
                 and for files existing. Fixed `getFiles()` to not get
                 directories. Fixed filename modification loop. Added output
-                for `print` and `verbose`. Added interactive mode.
+                for `print` and `verbose`. Added interactive mode. Fixed `trim`
+                argument parsing. Added loop to actually rename the files.
 '''
 
 import sys, platform, argparse
+from os import rename
 
 def main(argv):
     ''' Starts program, checks for correct usage, checks platform, sets global
@@ -65,6 +67,7 @@ def main(argv):
     # parse command arguments
     args = parser.parse_args()
 
+
     from helpers import setPlatform, makeList, getFiles
 
     # Check platform, if not Linux or Windows return 1 from program.
@@ -86,8 +89,10 @@ def main(argv):
         print('None of the files you entered could be found.')
         return
 
+
     if args.print or args.verbose:
         print('Input Files:', files)
+
 
     import copy, modifiers
     modified = copy.deepcopy(files)
@@ -95,9 +100,13 @@ def main(argv):
     if args.interactive:
         modified = [input('What would you like to rename `' + file + '` to?\n') for file in modified]
     else: # Loop through the execution list and send the tuple to another function.
-        for element in masterExecutionList:
-            if args.print and (element[0] in ['time', 'date', 'touch', 'delete']): continue
-            else: modified = modifiers.modify[element[0]](modified,element[1])
+        for arg, tuple in masterExecutionList:
+            if args.print and (arg in ['time', 'date', 'touch', 'delete']): continue
+            else: modified = modifiers.modify[arg](modified,tuple)
+
+    if not args.print and not args.delete:
+        for start, end in zip(files, modified):
+            rename(start, end)
 
     if args.print or args.verbose:
         print('Output Files:', modified)
