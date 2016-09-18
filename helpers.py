@@ -43,9 +43,9 @@ def makeList(argv, args):
     ''' Converts the arguments given to this program into a formatted list for easier execution. '''
     masterExecutionList = []
     # set some important variables...
+    trimCount = 0
     replaceCount = 0
     numberCount = 0
-    trimCount = 0
     dateCount = 0
     timeCount = 0
 
@@ -64,7 +64,7 @@ def makeList(argv, args):
             masterExecutionList.append(('touch', None))
 
         elif cmd in ('-t', '--trim'):
-            masterExecutionList.append(('trim', args.trim[trimCount]))
+            masterExecutionList.append(('trim', args.trim[trimCount][0]))
             trimCount += 1
 
         elif cmd in ('-r', '--replace'):
