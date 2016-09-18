@@ -90,13 +90,14 @@ def main(argv):
         return
 
 
+    # Print Original Names
     if args.print or args.verbose:
         print('Input Files:', files)
 
 
+    # Get new filenames
     import copy, modifiers
     modified = copy.deepcopy(files)
-
     if args.interactive:
         modified = [input('What would you like to rename `' + file + '` to?\n') for file in modified]
     else: # Loop through the execution list and send the tuple to another function.
@@ -104,10 +105,14 @@ def main(argv):
             if args.print and (arg in ['time', 'date', 'touch', 'delete']): continue
             else: modified = modifiers.modify[arg](modified,tuple)
 
+
+    # Rename Files
     if not args.print and not args.delete:
         for start, end in zip(files, modified):
             rename(start, end)
 
+
+    # Print Final Names
     if args.print or args.verbose:
         print('Output Files:', modified)
 
