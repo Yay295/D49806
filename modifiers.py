@@ -2,6 +2,7 @@
 
 import os, pathlib, re
 from time import localtime, mktime
+from helpers import parseDate, parseTime
 
 
 def countstring(files, string):
@@ -20,22 +21,22 @@ def countstring(files, string):
 def changeDate(files, date):
     ''' Changes the day, month, and year of the modification time
     of every file in `files`. '''
+    date = parseDate(date)
     for file in files:
-        mTime = time.localtime(os.path.getmtime(file))
-        mTime.tm_mday = date.tm_mday
-        mTime.tm_mon = date.tm_mon
-        mTime.tm_year = date.tm_year
-        os.utime(file, (os.path.getatime(file), time.mktime(mTime)))
+        mTime = localtime(os.path.getmtime(file))
+        mTime = (date.tm_year, date.tm_mon, date.tm_mday, mTime.tm_hour, mTime.tm_min, mTime.tm_sec, mTime.tm_wday, mTime.tm_yday, mTime.tm_isdst)
+        os.utime(file, (os.path.getatime(file), mktime(mTime)))
+    return files
 
 def changeTime(files, time):
     ''' Changes the hours, minutes, and seconds of the modification time
     of every file in `files`. '''
+    time = parseTime(time)
     for file in files:
         mTime = localtime(os.path.getmtime(file))
-        mTime.tm_hour = time.tm_hour
-        mTime.tm_min = time.tm_min
-        mTime.tm_sec = time.tm_sec
+        mTime = (mTime.tm_year, mTime.tm_mon, mTime.tm_mday, time.tm_hour, time.tm_min, time.tm_sec, mTime.tm_wday, mTime.tm_yday, mTime.tm_isdst)
         os.utime(file, (os.path.getatime(file), mktime(mTime)))
+    return files
 
 
 def touchFiles(files, dummy):
@@ -46,6 +47,7 @@ def touchFiles(files, dummy):
             pathlib.Path(file).touch()
         except FileExistsError as e:
             print(e)
+    return files
 
 def deleteFiles(files, dummy):
     ''' Attempts to delete the files passed in as a list of filenames. '''
@@ -54,6 +56,7 @@ def deleteFiles(files, dummy):
             os.remove(file)
         except OSError as e:
             print(e)
+    return files
 
 
 modify = {
