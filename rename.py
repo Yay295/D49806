@@ -36,6 +36,9 @@
                 directories. Fixed filename modification loop. Added output
                 for `print` and `verbose`. Added interactive mode. Fixed `trim`
                 argument parsing. Added loop to actually rename the files.
+ September 20   Fixed countstring argument parsing. Fixed `changeDate()`,
+                `changeTime()`, `touchFiles()`, and `deleteFiles()` not
+				returning anything. Fixed `changeDate()` and `changeTime()`.
 '''
 
 import sys, platform, argparse
@@ -58,7 +61,7 @@ def main(argv):
     # arguments with required parameters and potential consecutive calls with their own data
     parser.add_argument('-t', '--trim',    action='append', nargs=1, metavar='n',           help='n > 0: trim n characters from the start of each filename. n < 0: trim n characters from the end of each filename.', type=int)
     parser.add_argument('-r', '--replace', action='append', nargs=2, metavar=('A','B'),     help='do a regular expression replace on the given filenames')
-    parser.add_argument('-n', '--number',  action='append', nargs=1, metavar='countstring', help='', type=int)
+    parser.add_argument('-n', '--number',  action='append', nargs=1, metavar='countstring', help='')
     parser.add_argument('-D', '--date',    action='append', nargs=1, metavar='DDMMYYYY',    help='change file modification datestamps')
     parser.add_argument('-T', '--time',    action='append', nargs=1, metavar='HHMMSS',      help='change file modification timestamps')
     # required arguments
